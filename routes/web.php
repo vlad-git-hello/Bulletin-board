@@ -21,3 +21,15 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::group([
+        'namespace' => '\App\Http\Controllers\Category'
+    ], function () {
+    Route::resource('/category', 'CategoryController');
+
+    Route::group(['prefix' => 'categories/{category}', 'as' => 'categories.'], function () {
+        Route::post('/up', 'TransformController@up')->name('up');
+        Route::post('/down', 'TransformController@down')->name('down');
+        Route::post('/first', 'TransformController@first')->name('first');
+        Route::post('/last', 'TransformController@last')->name('last');
+    });
+});
