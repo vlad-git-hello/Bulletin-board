@@ -33,3 +33,14 @@ Route::group([
         Route::post('/last', 'TransformController@last')->name('last');
     });
 });
+
+
+Route::group(['namespace' => '\App\Http\Controllers\Advert'], function () {
+    Route::resource('/advert', 'AdvertController');
+});
+
+Route::group(['namespace' => '\App\Http\Controllers\Image'], function () {
+    Route::post('dropzone/store','ImageController@store')->name('store');
+    Route::delete('dropzone/destroy/{imageName}','ImageController@destroy')->name('destroy');
+    Route::delete('dropzone/destroy-image/{imageName}','ImageController@destroyImage')->name('destroyImage');
+});

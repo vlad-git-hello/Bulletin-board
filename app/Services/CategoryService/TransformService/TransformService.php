@@ -13,9 +13,6 @@ use App\Models\Category;
 /**
  * Class TransformService
  * @package App\Services\CategoryService\TransformService
- *
- * @method first()
- * @method last()
  */
 class TransformService
 {
