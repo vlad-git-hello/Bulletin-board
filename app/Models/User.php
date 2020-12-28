@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Locality\City;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,8 +19,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'contact_name',
         'email',
         'password',
+        'telephone',
+        'photo',
+        'city_id',
     ];
 
     /**
@@ -40,4 +45,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function adverts()
+    {
+        return $this->belongsToMany(Advert::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

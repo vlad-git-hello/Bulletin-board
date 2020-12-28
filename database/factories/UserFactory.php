@@ -24,10 +24,14 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
+            'contact_name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$vixdexO6fXsDVivKiQ0AyOr/lq8lrrzruYYha6d3PIiVWSAgu95Jm', // password
             'remember_token' => Str::random(10),
+            'telephone' => $this->faker->unique()->phoneNumber,
+            'photo' => $this->faker->image(),
+            'city_id' => random_int(1, 25),
         ];
     }
 }
