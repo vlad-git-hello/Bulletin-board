@@ -1,42 +1,72 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Http\Requests\Auth\ResendRequest;
+use App\Services\Auth\VerificationService\VerificationService;
+use Illuminate\Http\RedirectResponse;
 
+/**
+ * Class VerificationController
+ * @package App\Http\Controllers\Auth
+ */
 class VerificationController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Email Verification Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be re-sent if the user didn't receive the original email message.
-    |
-    */
-
-    use VerifiesEmails;
-
     /**
-     * Where to redirect users after verification.
-     *
-     * @var string
+     * @var VerificationService
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    private VerificationService $serve;
 
     /**
-     * Create a new controller instance.
-     *
+     * VerificationController constructor.
+     * @param VerificationService $service
      * @return void
      */
-    public function __construct()
+    public function __construct(VerificationService $service)
     {
-        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+        $this->serve = $service;
+    }
+
+    /**
+     * Show form for resend mail.
+     */
+    public function show()
+    {
+        return view('auth.verify');
+    }
+
+    /**
+     * Verify email.
+     *
+     * @param $token
+     * @return RedirectResponse
+     */
+    public function verify(string $token): RedirectResponse
+    {
+        try {
+            $this->serve->verify($token);
+            return redirect()->route('login')->with('success', 'Your e-mail is verified. You can now login.');
+        } catch (\DomainException $e) {
+            return redirect()->route('login')->with('error', 'Sorry your link cannot be identified.');
+        }
+    }
+
+    /**
+     * Resend mail message.
+     *
+     * @param ResendRequest $request
+     * @return RedirectResponse
+     */
+    public function resend(ResendRequest $request): RedirectResponse
+    {
+        try {
+            $this->serve->resend($request['email']);
+            return redirect()->back()->with('success', 'Email sent.');
+        } catch (\DomainException $e) {
+            return redirect()->back()->with('error', 'Incorrect e-mail.');
+        }
     }
 }

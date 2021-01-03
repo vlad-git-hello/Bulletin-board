@@ -1,11 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ *
+ */
+
 namespace Database\Seeders;
 
 use App\Models\Advert;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class DatabaseSeeder
+ * @package Database\Seeders
+ */
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -13,9 +23,8 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-//        User::factory(10)->create();
         $this->call([
             CategorySeeder::class,
 //            CitySeeder::class,
