@@ -111,6 +111,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return bool
+     */
+    public function hasWaitVerified(): bool
+    {
+        return $this->verify_status === self::STATUS_WAIT;
+    }
+
+    /**
      *
      */
     public function verify(): void
