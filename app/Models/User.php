@@ -149,7 +149,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return self::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => self::hashPassword($data['password']),
             'verify_status' => self::STATUS_WAIT,
             'verify_token' => self::generateToken(),
         ]);
@@ -161,5 +161,14 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function generateToken(): string
     {
         return Str::random(20);
+    }
+
+    /**
+     * @param string $password
+     * @return string
+     */
+    public static function hashPassword(string $password): string
+    {
+        return Hash::make($password);
     }
 }

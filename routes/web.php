@@ -55,3 +55,9 @@ Route::group(['namespace' => '\App\Http\Controllers\Image'], function () {
     Route::delete('dropzone/destroy/{imageName}', 'ImageController@destroy')->name('destroy');
     Route::delete('dropzone/destroy-image/{imageName}', 'ImageController@destroyImage')->name('destroyImage');
 });
+
+Route::group(['namespace' => '\App\Http\Controllers\UserProfile',], function () {
+    Route::get('/profile/{user}', 'ProfileController@show')->name('profile.show');
+    Route::get('/profile/{user}/edit', 'ProfileController@edit')->name('profile.edit');
+    Route::put('/profile/{user}/update', 'ProfileController@update')->name('profile.update');
+});
