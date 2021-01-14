@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\ProfileService;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -15,9 +16,22 @@ class UserService
 {
     /**
      * @param $data
-     * @param User $user
+     * @param $id
      */
-    public function updateUser($data, User $user): void
+    public function updateUser(Request $data, int $id): void
+    {
+        /** @var User $user */
+        $user = User::findOrFail($id);
+        $updateData = $this->preparationData($data, $user);
+        $user->update($updateData);
+    }
+
+    /**
+     * @param $data
+     * @param $user
+     * @return array
+     */
+    private function preparationData($data, $user): array
     {
         $updateData = [
             'name' => $data['name'],
@@ -32,14 +46,26 @@ class UserService
         }
 
         if ($data['photo']) {
-            $updateData['photo'] = $this->saveStoragePhoto($data);
+            $newPhoto = $data->file('photo');
+            $updateData['photo'] = $this->updateStoragePhoto($newPhoto, $user);
         }
 
-        $user->update($updateData);
+        return $updateData;
     }
 
-    private function saveStoragePhoto($data)
+    /**
+     * @param $newPhoto
+     * @param $user
+     * @return bool
+     */
+    private function updateStoragePhoto($newPhoto, $user)
     {
-        return Storage::put('', $data->file('photo'));
+        /** @var User $user */
+
+        if (!$user->hasDefaultPhoto()) {
+            Storage::delete($user->photo);
+        }
+
+        return Storage::put('/profile', $newPhoto);
     }
 }

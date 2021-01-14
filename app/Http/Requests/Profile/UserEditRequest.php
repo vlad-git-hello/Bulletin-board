@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class UserEditRequest
@@ -32,7 +33,7 @@ class UserEditRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'contact_name' => 'required|string|max:255',
-            'email' => 'required|string|max:255|email|unique:users,id,' . $this->user->id,
+            'email' => 'required|string|max:255|email|unique:users,id,' .  Auth::id(),
             'password' => 'nullable|string|min:8',
             'telephone' => 'required|phone_number',
             'city_id' => 'required|integer',
@@ -51,6 +52,4 @@ class UserEditRequest extends FormRequest
             'telephone.phone_number' => 'Invalid phone number.'
         ];
     }
-
-
 }

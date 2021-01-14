@@ -92,4 +92,12 @@ class Advert extends Model
     {
         return $this->type_author === self::TYPE_AUTHOR_PRIVATE;
     }
+
+    /**
+     * @return string
+     */
+    public function shortOverview(): string
+    {
+        return mb_substr($this->overview, 0, 40) . '...';
+    }
 }

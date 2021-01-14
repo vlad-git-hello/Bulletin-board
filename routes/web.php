@@ -57,7 +57,12 @@ Route::group(['namespace' => '\App\Http\Controllers\Image'], function () {
 });
 
 Route::group(['namespace' => '\App\Http\Controllers\UserProfile',], function () {
-    Route::get('/profile/{user}', 'ProfileController@show')->name('profile.show');
-    Route::get('/profile/{user}/edit', 'ProfileController@edit')->name('profile.edit');
-    Route::put('/profile/{user}/update', 'ProfileController@update')->name('profile.update');
+    Route::get('/profile', 'ProfileController@index')->name('profile.index');
+    Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
+    Route::put('/profile/update', 'ProfileController@update')->name('profile.update');
+
+    Route::resource('/user/advert', 'AdvertController')
+        ->except('index')->names('profile.advert');
+    Route::get('/user/advert/{id}/all', 'AdvertController@index')
+        ->name('profile.advert.index');
 });

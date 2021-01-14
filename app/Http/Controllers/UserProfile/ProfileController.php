@@ -7,12 +7,12 @@ namespace App\Http\Controllers\UserProfile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\UserEditRequest;
 use App\Models\Locality\City;
-use App\Models\User;
 use App\Services\ProfileService\UserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ProfileController
@@ -26,31 +26,32 @@ class ProfileController extends Controller
     private UserService $service;
 
     /**
-     * ProfileController constructor.
+     * ProfileController constructor
+     *
      * @param UserService $service
      */
     public function __construct(UserService $service)
     {
         $this->service = $service;
+        $this->middleware('auth');
     }
 
     /**
-     * @param User $user
      * @return Application|Factory|View
      */
-    public function show(User $user)
+    public function index()
     {
-        $imageUrl = Storage::url($user['photo']);
+        $user = Auth::user();
 
-        return view('profile.user.show', compact('user', 'imageUrl'));
+        return view('profile.user.index', compact('user'));
     }
 
     /**
-     * @param User $user
      * @return Application|Factory|View
      */
-    public function edit(User $user)
+    public function edit()
     {
+        $user = Auth::user();
         $cities = City::all();
 
         return view('profile.user.edit', compact('user', 'cities'));
@@ -58,15 +59,18 @@ class ProfileController extends Controller
 
     /**
      * @param UserEditRequest $request
-     * @param User $user
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
-    public function update(UserEditRequest $request, User $user)
+    public function update(UserEditRequest $request): RedirectResponse
     {
-        $this->service->updateUser($request, $user);
+        try {
+            $id = Auth::id();
 
-        $imageUrl = Storage::url($user['photo']);
+            $this->service->updateUser($request, $id);
 
-        return view('profile.user.show', compact('user', 'imageUrl'));
+            return redirect()->route('profile.index');
+        } catch (\DomainException $e) {
+            return redirect()->back('error', $e->getMessage());
+        }
     }
 }

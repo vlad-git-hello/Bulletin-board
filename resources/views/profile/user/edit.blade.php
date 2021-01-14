@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+    @php /** @var User $user */use App\Models\User;@endphp
+    @php /** @var City $city */use App\Models\Locality\City;@endphp
 
-    <form method="POST" action="{{ route('profile.update', $user) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -79,7 +81,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Save changes</button>
-        <a class="btn btn-danger" href="{{ route('profile.show', $user) }}">Назад</a>
+        <a class="btn btn-danger" href="{{ route('profile.index') }}">Back</a>
     </form>
 
 @endsection

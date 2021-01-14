@@ -23,6 +23,15 @@ use Illuminate\Support\Str;
  * Class User
  * @package App\Models
  *
+ * @property int id
+ * @property string name
+ * @property string contact_name
+ * @property string email
+ * @property string password
+ * @property string telephone
+ * @property string photo
+ * @property int city_id
+ * @property string verify_status
  * @property string verify_token
  */
 class User extends Authenticatable implements MustVerifyEmail
@@ -41,11 +50,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public const STATUS_ACTIVE = 'active';
 
     /**
+     *
+     */
+    public const DEFAULT_PHOTO = '/profile/default-user-image.png';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
+    protected array $fillable = [
         'name',
         'contact_name',
         'email',
@@ -62,7 +76,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $hidden = [
+    protected array $hidden = [
         'password',
         'remember_token',
     ];
@@ -72,7 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $casts = [
+    protected array $casts = [
         'email_verified_at' => 'datetime',
     ];
 
@@ -152,6 +166,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => self::hashPassword($data['password']),
             'verify_status' => self::STATUS_WAIT,
             'verify_token' => self::generateToken(),
+            'photo' => self::DEFAULT_PHOTO,
         ]);
     }
 
@@ -170,5 +185,23 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function hashPassword(string $password): string
     {
         return Hash::make($password);
+    }
+
+    /**
+     * @return string
+     */
+    public function fullAddressName(): string
+    {
+        $city = $this->city;
+
+        return $city ? $city->name . ', ' . $city->region->name : '-';
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDefaultPhoto(): bool
+    {
+        return $this->photo === self::DEFAULT_PHOTO;
     }
 }
