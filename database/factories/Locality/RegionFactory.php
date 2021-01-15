@@ -12,7 +12,7 @@ class RegionFactory extends Factory
      *
      * @var string
      */
-    protected $model = Region::class;
+    protected string $model = Region::class;
 
     /**
      * Define the model's default state.

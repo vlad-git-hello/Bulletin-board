@@ -27,9 +27,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeeder::class,
-//            CitySeeder::class,
             RegionSeeder::class,
-//            AdvertSeeder::class,
         ]);
 
         User::factory(10)->create();

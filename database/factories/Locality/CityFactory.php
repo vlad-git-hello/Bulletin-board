@@ -12,7 +12,7 @@ class CityFactory extends Factory
      *
      * @var string
      */
-    protected $model = City::class;
+    protected string $model = City::class;
 
     /**
      * Define the model's default state.
