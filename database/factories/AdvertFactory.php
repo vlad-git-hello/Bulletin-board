@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Advert;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Class AdvertFactory
+ * @package Database\Factories
+ */
 class AdvertFactory extends Factory
 {
     /**
@@ -12,14 +18,15 @@ class AdvertFactory extends Factory
      *
      * @var string
      */
-    protected $model = Advert::class;
+    protected string $model = Advert::class;
 
     /**
      * Define the model's default state.
      *
      * @return array
+     * @throws \Exception
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'title' => $this->faker->name,

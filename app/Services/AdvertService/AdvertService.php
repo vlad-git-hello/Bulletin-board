@@ -19,7 +19,11 @@ use Illuminate\Support\Facades\Storage;
  */
 class AdvertService
 {
-    public function create($dataAdvert)
+    /**
+     * @param $dataAdvert
+     * @return Advert
+     */
+    public function create($dataAdvert): Advert
     {
         $user = Auth::user();
 
@@ -32,7 +36,11 @@ class AdvertService
         return $advert;
     }
 
-    public function update($advert, $data)
+    /**
+     * @param $advert
+     * @param $data
+     */
+    public function update($advert, $data): void
     {
         $advert->update($data->all());
 
@@ -45,7 +53,10 @@ class AdvertService
         }
     }
 
-    public function destroy($advert)
+    /**
+     * @param $advert
+     */
+    public function destroy($advert): void
     {
         $images = $advert->images()->get();
 
@@ -56,7 +67,11 @@ class AdvertService
         $advert->delete();
     }
 
-    private function addImage($images, $id)
+    /**
+     * @param $images
+     * @param $id
+     */
+    private function addImage($images, $id): void
     {
         foreach ($images as $image) {
             Image::create([
@@ -66,7 +81,10 @@ class AdvertService
         }
     }
 
-    private function deleteImage($images)
+    /**
+     * @param $images
+     */
+    private function deleteImage($images): void
     {
         Storage::delete($images);
 
