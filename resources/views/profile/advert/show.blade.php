@@ -3,7 +3,7 @@
 @section('content')
     <h2 class="mb-3">Просмотр категории</h2>
 
-    <a class="btn btn-success" href="{{ route('profile.advert.index', $advert->user_id) }}">Назад</a>
+    <a class="btn btn-success" href="{{ route('profile.advert.index') }}">Назад</a>
     <a class="btn btn-primary" href="{{ route('profile.advert.edit', $advert) }}">Редактировать</a>
     <form class="d-lg-inline-block" method="POST"
           action="{{ route('profile.advert.destroy', $advert) }}" id="form-create">
@@ -73,16 +73,15 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <div class="card">
-{{--                            <img class="card-img-top" style="height: 200px;" src="images/1.webp" alt="Card image cap">--}}
                             <div class="card-body">
-                                <h5 class="card-title">{{ $advert->user->contact_name }}</h5>
+                                <h5 class="card-title">{{ $user->contact_name }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">
                                     Зарегистрирован:
-                                    {{ date('j F, Y', strtotime($advert->user->created_at)) }}
+                                    {{ date('j F, Y', strtotime($user->created_at)) }}
                                 </h6>
                                 <h6 class="card-subtitle mt-3">
                                     Контактный телефон:
-                                    {{ $advert->user->telephone }}
+                                    {{ $user->telephone }}
                                 </h6>
                             </div>
                         </div>
@@ -92,10 +91,8 @@
                             <div class="card-body">
                                 <h6 class="card-subtitle mb-2 text-muted">Точный адрес</h6>
                                 <h5 class="card-title">
-                                    {{ $advert->user->city->name }},
-                                    {{ $advert->user->city->region->name }}
+                                    {{ $user->fullAddressName() }}
                                 </h5>
-{{--                                <img class="card-img-top" style="height: 200px;" src="images/1.webp" alt="Card image cap">--}}
                             </div>
                         </div>
                     </div>

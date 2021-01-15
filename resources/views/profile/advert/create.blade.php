@@ -4,7 +4,7 @@
 
     <h2>Создать обьявление</h2>
 
-    <a class="btn btn-success mb-3" href="{{ route('profile.advert.index', $user) }}">Назад</a>
+    <a class="btn btn-success mb-3" href="{{ route('profile.advert.index') }}">Назад</a>
 
     <form method="POST" action="{{ route('profile.advert.store') }}" id="form-create" enctype="multipart/form-data">
         @csrf
@@ -40,27 +40,20 @@
         <div class="form-group">
             <label for="state">Состояние товара</label>
             <select class="form-control" id="state" name="state">
-                <option value="{{ \App\Models\Advert::STATE_NEW }}"
-                        @if(old('state') === \App\Models\Advert::STATE_NEW) selected @endif
-                >Новое
-                </option>
-                <option value="{{ \App\Models\Advert::STATE_SHABBY }}"
-                        @if(old('state') === \App\Models\Advert::STATE_SHABBY) selected @endif>Б/у
-                </option>
+                @foreach($stateTypes as $value => $label)
+                    <option value="{{ $value }}" @if(old('state') === $value) selected @endif>
+                        {{ $label }}</option>
+                @endforeach
             </select>
         </div>
 
         <div class="form-group">
             <label for="type_author">Тип обьявления</label>
             <select class="form-control" id="type_author" name="type_author">
-                <option value="{{ \App\Models\Advert::TYPE_AUTHOR_BUSINESS }}"
-                        @if(old('type_author') === \App\Models\Advert::TYPE_AUTHOR_BUSINESS ) selected @endif
-                >Бизнес
-                </option>
-                <option value="{{ \App\Models\Advert::TYPE_AUTHOR_PRIVATE }}"
-                        @if(old('type_author') === \App\Models\Advert::TYPE_AUTHOR_PRIVATE) selected @endif
-                >Часное лицо
-                </option>
+                @foreach($typeAuthors as $value => $label)
+                    <option value="{{ $value }}" @if(old('type_author') === $value) selected @endif>
+                        {{ $label }}</option>
+                @endforeach
             </select>
         </div>
 

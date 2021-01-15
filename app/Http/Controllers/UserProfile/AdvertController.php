@@ -15,6 +15,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * Class AdvertController
@@ -35,16 +37,18 @@ class AdvertController extends Controller
     public function __construct(AdvertService $service)
     {
         $this->service = $service;
+        $this->middleware('auth');
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param $id
      * @return Application|Factory|View
      */
-    public function index($id)
+    public function index()
     {
+        $id = Auth::id();
+
         $adverts = Advert::where('user_id', '=', $id)
             ->with(['images'])
             ->orderBy('created_at', 'DESC')
@@ -62,9 +66,11 @@ class AdvertController extends Controller
     {
         $categories = Category::defaultOrder()->withDepth()->get();
 
-        $user = 1;
+        $typeAuthors = Advert::getTypeAuthors();
+        $stateTypes = Advert::getStateTypes();
 
-        return view('profile.advert.create', compact('categories', 'user'));
+        return view('profile.advert.create',
+                    compact('categories','typeAuthors', 'stateTypes'));
     }
 
     /**
@@ -88,7 +94,13 @@ class AdvertController extends Controller
      */
     public function show(Advert $advert)
     {
-        return view('profile.advert.show', compact('advert'));
+        if (!Gate::allows('view-advert', $advert)) {
+            abort(403);
+        }
+
+        $user = Auth::user();
+
+        return view('profile.advert.show', compact('advert', 'user'));
     }
 
     /**
@@ -99,6 +111,10 @@ class AdvertController extends Controller
      */
     public function edit(Advert $advert)
     {
+        if (!Gate::allows('update-advert', $advert)) {
+            abort(403);
+        }
+
         $categories = Category::defaultOrder()->withDepth()->get();
 
         return view('profile.advert.edit', compact('advert', 'categories'));
@@ -109,13 +125,17 @@ class AdvertController extends Controller
      *
      * @param UpdateRequest $request
      * @param Advert $advert
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
-    public function update(UpdateRequest $request, Advert $advert)
+    public function update(UpdateRequest $request, Advert $advert): RedirectResponse
     {
+        if (!Gate::allows('update-advert', $advert)) {
+            abort(403);
+        }
+
         $this->service->update($advert, $request);
 
-        return view('profile.advert.show', compact('advert'));
+        return redirect()->route('profile.advert.show', $advert);
     }
 
     /**
@@ -126,9 +146,12 @@ class AdvertController extends Controller
      */
     public function destroy(Advert $advert): RedirectResponse
     {
+        if (!Gate::allows('delete-advert', $advert)) {
+            abort(403);
+        }
+
         $this->service->destroy($advert);
 
-        return redirect()->route('profile.advert.index', $advert->user_id)
-            ->with(['success' => $advert->title]);
+        return redirect()->route('profile.advert.index')->with(['success' => $advert->title]);
     }
 }

@@ -4,7 +4,7 @@
     @php /** @var App\Models\User $user */@endphp
 
     <div class="main-body">
-        {{--            <a class="btn btn-primary" href="{{ route('profile.advert.index') }}">Advert</a>--}}
+        <a class="btn btn-primary" href="{{ route('profile.advert.index') }}">Advert</a>
 
         <div class="row gutters-sm mt-4">
             <div class="col-md-4 mb-3">

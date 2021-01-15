@@ -26,7 +26,7 @@ class Category extends Model
     /**
      * @var string[]
      */
-    protected $fillable = [
+    protected array $fillable = [
         'title',
         'parent_id',
     ];
@@ -34,12 +34,12 @@ class Category extends Model
     /**
      * @var bool
      */
-    public $timestamps = false;
+    public bool $timestamps = false;
 
     /**
      * @return BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class);
     }

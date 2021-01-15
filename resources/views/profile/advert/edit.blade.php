@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2>Редактировать категорию</h2>
+    <h2>Редактировать Обьявление</h2>
 
-    <a class="btn btn-success mb-3" href="{{ route('profile.advert.index', $advert->user_id) }}">Назад</a>
+    <a class="btn btn-success mb-3" href="{{ route('profile.advert.index') }}">Назад</a>
 
     <form method="POST" action="{{ route('profile.advert.update', $advert) }}" id="form-create">
         @method('PUT')

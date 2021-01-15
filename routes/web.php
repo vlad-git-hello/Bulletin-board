@@ -52,8 +52,7 @@ Route::group(['namespace' => '\App\Http\Controllers\Advert'], function () {
 
 Route::group(['namespace' => '\App\Http\Controllers\Image'], function () {
     Route::post('dropzone/store', 'ImageController@store')->name('store');
-    Route::delete('dropzone/destroy/{imageName}', 'ImageController@destroy')->name('destroy');
-    Route::delete('dropzone/destroy-image/{imageName}', 'ImageController@destroyImage')->name('destroyImage');
+    Route::delete('dropzone/destroy/{path}/{imageName}', 'ImageController@destroy')->name('destroy');
 });
 
 Route::group(['namespace' => '\App\Http\Controllers\UserProfile',], function () {
@@ -61,8 +60,5 @@ Route::group(['namespace' => '\App\Http\Controllers\UserProfile',], function () 
     Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
     Route::put('/profile/update', 'ProfileController@update')->name('profile.update');
 
-    Route::resource('/user/advert', 'AdvertController')
-        ->except('index')->names('profile.advert');
-    Route::get('/user/advert/{id}/all', 'AdvertController@index')
-        ->name('profile.advert.index');
+    Route::resource('/user/advert', 'AdvertController')->names('profile.advert');
 });

@@ -6,6 +6,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Advert
@@ -32,7 +34,12 @@ class Advert extends Model
     public const TYPE_AUTHOR_PRIVATE = 'private';
     public const TYPE_AUTHOR_BUSINESS = 'business';
 
-    protected $fillable = [
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected array $fillable = [
         'title',
         'overview',
         'price',
@@ -43,20 +50,26 @@ class Advert extends Model
         'user_id',
     ];
 
-    public function category()
+    /**
+     * @return BelongsTo
+     */
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function user()
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }
@@ -64,7 +77,7 @@ class Advert extends Model
     /**
      * @return bool
      */
-    public function isNew()
+    public function isNew(): bool
     {
         return $this->state === self::STATE_NEW;
     }
@@ -72,7 +85,7 @@ class Advert extends Model
     /**
      * @return bool
      */
-    public function isShabby()
+    public function isShabby(): bool
     {
         return $this->state === self::STATE_SHABBY;
     }
@@ -99,5 +112,36 @@ class Advert extends Model
     public function shortOverview(): string
     {
         return mb_substr($this->overview, 0, 40) . '...';
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function isAuthor(int $id): bool
+    {
+        return $this->user_id === $id;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getTypeAuthors(): array
+    {
+        return [
+            self::TYPE_AUTHOR_BUSINESS => 'Business',
+            self::TYPE_AUTHOR_PRIVATE => 'Private person',
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getStateTypes(): array
+    {
+        return [
+            self::STATE_NEW => 'New',
+            self::STATE_SHABBY => 'Shabby'
+        ];
     }
 }

@@ -6,7 +6,10 @@
     @include('messages.profile.advert.success')
     @include('messages.profile.advert.error')
 
-    <a class="btn btn-success mt-4" href="{{ route('profile.advert.create') }}">Create advert</a>
+    <div>
+        <a class="btn btn-primary" href="{{ route('profile.index') }}">Profile</a>
+        <a class="btn btn-success" href="{{ route('profile.advert.create') }}">Create advert</a>
+    </div>
 
     <div class="row mb-4">
         @foreach($adverts as $advert)
