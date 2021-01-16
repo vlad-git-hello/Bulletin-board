@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group([
+    'namespace' => '\App\Http\Controllers',
+    ], function () {
+        Route::get('/', 'HomeController@index')->name('home');
+        Route::get('/search/{category}', 'HomeController@search')
+            ->name('home.search');
 });
 
 Auth::routes(['verify' => true]);
@@ -29,8 +35,6 @@ Route::group([
         Route::get('/register/confirm', 'RegisterController@confirmRegistration')
             ->name('registration.confirm');
 });
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group([
         'namespace' => '\App\Http\Controllers\Category',
