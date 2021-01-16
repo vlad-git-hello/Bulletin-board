@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int view
  * @property int category_id
  * @property int user_id
+ * @property string created_at
+ * @property string updated_at
  *
  */
 class Advert extends Model

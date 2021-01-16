@@ -1,16 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <h2 class="mb-3">Просмотр категории</h2>
-
-    <a class="btn btn-success" href="{{ route('advert.index') }}">Назад</a>
-    <a class="btn btn-primary" href="{{ route('advert.edit', $advert) }}">Редактировать</a>
-    <form class="d-lg-inline-block" method="POST" action="{{ route('advert.destroy', $advert) }}" id="form-create">
-        @method('DELETE')
-        @csrf
-        <button class="btn btn-danger">Удалить</button>
-    </form>
-
     <div class=" mt-3 mb-5">
         <div class="row">
             <div class="col-8">
