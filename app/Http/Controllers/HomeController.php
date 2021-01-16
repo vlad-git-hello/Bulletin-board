@@ -1,28 +1,53 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Advert;
+use App\Models\Category;
+use App\Models\User;
+use Illuminate\Contracts\Support\Renderable;
 
+/**
+ * Class HomeController
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Show the application dashboard.
      *
-     * @return void
+     * @return Renderable
      */
-    public function __construct()
+    public function index(): Renderable
     {
-        $this->middleware('auth');
+        $categories = Category::get()->toTree();
+
+        $adverts = Advert::with(['images', 'user'])
+            ->orderBy('created_at', 'DESC')
+            ->paginate(8)
+            ->loadMorph('user', [
+                User::class => ['city'],
+            ]);
+
+        return view('home.index', compact('categories', 'adverts'));
     }
 
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @param $id
+     * @return Renderable
      */
-    public function index()
+    public function search($id): Renderable
     {
-        return view('home');
+        $adverts = Advert::where('category_id', '=' , $id)
+            ->with(['images', 'user'])
+            ->orderBy('created_at', 'DESC')
+            ->paginate(8)
+            ->loadMorph('user', [
+                User::class => ['city'],
+            ]);
+
+        return view('home.search', compact('adverts'));
     }
 }
